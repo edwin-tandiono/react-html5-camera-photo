@@ -1,6 +1,28 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Camera, { FACING_MODES, IMAGE_TYPES } from '../lib';
 import './reset.css';
+
+// Note: Change camera button is hidden when there is <= 1 camera to choose
+function CustomChangeCameraButton ({ onClick }) {
+  return (
+    <button
+      style={{
+        bottom: '40px',
+        left: 'calc(50% + 37px)',
+        margin: '0 10px',
+        position: 'absolute'
+      }}
+      onClick={onClick}
+    >
+      CHANGE CAMERA
+    </button>
+  );
+}
+
+CustomChangeCameraButton.propTypes = {
+  onClick: PropTypes.func.isRequired
+};
 
 function App (props) {
   function handleTakePhoto (dataUri) {
@@ -27,6 +49,8 @@ function App (props) {
 
   return (
     <Camera
+      allowChangeCamera
+      ChangeCameraButtonComponent={CustomChangeCameraButton}
       onTakePhoto = { (dataUri) => { handleTakePhoto(dataUri); } }
       onTakePhotoAnimationDone = { (dataUri) => { handleTakePhotoAnimationDone(dataUri); } }
       onCameraError = { (error) => { handleCameraError(error); } }

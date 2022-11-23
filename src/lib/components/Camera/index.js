@@ -11,6 +11,7 @@ import { useLibCameraPhoto } from './hooks/useLibCameraPhoto';
 import CircleButton from '../CircleButton';
 import WhiteFlash from '../WhiteFlash';
 import DisplayError from '../DisplayError';
+import ChangeCameraButton from '../ChangeCameraButton';
 import {
   getShowHideStyle,
   getVideoStyles,
@@ -34,10 +35,15 @@ function Camera (props) {
 
   const [
     mediaStream,
+    availableDeviceIds,
+    currentDevice,
     cameraStartError,
     cameraStopError,
-    getDataUri
-  ] = useLibCameraPhoto(videoRef, props.idealFacingMode, props.idealResolution, props.isMaxResolution);
+    getDataUri,
+    changeCamera
+  ] = useLibCameraPhoto(videoRef, props.idealFacingMode, props.idealResolution, props.isMaxResolution, props.allowChangeCamera);
+
+  console.log('----', availableDeviceIds, mediaStream, currentDevice);
 
   useEffect(() => {
     if (mediaStream) {
@@ -147,6 +153,22 @@ function Camera (props) {
         isClicked={!isShowVideo}
         onClick={handleTakePhoto}
       />
+      {props.allowChangeCamera && availableDeviceIds.length > 1 && (
+        <ChangeCameraButton
+          Component={props.ChangeCameraButtonComponent}
+          onClick={changeCamera}
+        />
+      )}
+      {/* <div style={{position: 'relative', top: '50px'}}> */}
+      {/*  <span style={{color: 'white'}}>{`CAN CHANGE LENS: ${availableDeviceIds.length > 1}`}</span> */}
+      {/*  <br /> */}
+      {/*  <button onClick={() => navigator.clipboard.writeText(JSON.stringify([...availableDeviceIds, currentDevice]))}> */}
+      {/*    Copy Info */}
+      {/*  </button> */}
+      {/*  <button onClick={changeCamera}> */}
+      {/*    Change camera */}
+      {/*  </button> */}
+      {/* </div> */}
     </div>
   );
 }
@@ -160,6 +182,8 @@ export {
 export default Camera;
 
 Camera.propTypes = {
+  allowChangeCamera: PropTypes.bool,
+  ChangeCameraButtonComponent: PropTypes.func,
   onTakePhoto: PropTypes.func,
   onTakePhotoAnimationDone: PropTypes.func,
   onCameraError: PropTypes.func,
@@ -178,5 +202,7 @@ Camera.propTypes = {
 };
 
 Camera.defaultProps = {
+  allowChangeCamera: false,
+  ChangeCameraButtonComponent: null,
   isDisplayStartCameraError: true
 };

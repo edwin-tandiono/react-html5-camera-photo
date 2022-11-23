@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import App from './AppDemoAnimatedGif';
+// import App from './AppDemoAnimatedGif';
 // import App from './AppMinimumUsage';
-// import App from './AppAllProps';
+import App from './AppAllProps';
 // import App from './AppWithUmountCamera';
 // import App from './AppWithImagePreview';
 // import App from './AppWithDynamicProperties';
